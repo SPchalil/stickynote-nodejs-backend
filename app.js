@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const cors = require('cors');
+app.use(cors())
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -60,7 +62,36 @@ app.get('/stickynotes', (req, res) => {
    console.log('1');
    connection.end();
    })
+   
+/*
+To delete data in MySQL database from a node.js application, you follow these steps:
 
+--Establish a connection to the MySQL database.
+--Execute a DELETE statement by calling the query() method on a Connection object.
+--Disconnect from the MySQL database server.
+
+app.get('/stickynotes', (req, res) => {
+   var mysql      = require('mysql2');
+   var connection = mysql.createConnection({
+     host     : 'localhost',
+     user     : 'root',
+     password : '123456',
+     database : 'stickynotesapp'
+   });
+    
+   connection.connect();
+   let sql = `DELETE FROM stickynotes WHERE stickynotekey = ?`;
+   connection.query(sql, 1, (error, results, fields)=> { 
+      if (error) 
+      return console.error(error.message);
+      res.send(results);
+      console.log('Deleted Row(s):', results.affectedRows);
+    });
+   
+   
+   connection.end();
+   })
+*/
 /*-----------fake api notes----------------*/
 /*
 app.get('/notes', (req, res) => {
