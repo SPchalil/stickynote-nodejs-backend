@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const cors = require('cors');
-app.use(cors())
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -15,7 +15,7 @@ app.post('/notes', (req, res) => {
 });
 */
 /*-----------MySql - Users----------------*/
-/*
+
 app.get('/users', (req, res) => {
 var mysql      = require('mysql2');
 var connection = mysql.createConnection({
@@ -37,7 +37,7 @@ connection.query('SELECT * from users', function (error, results, fields) { //OR
 console.log('1');
 connection.end();
 })
-*/
+
 /*-----------MySql - Stickynotes----------------*/
 
 app.get('/stickynotes', (req, res) => {
@@ -55,7 +55,7 @@ app.get('/stickynotes', (req, res) => {
       if (error) throw error;
       console.log('2');
       res.send(results);
-      console.log(results[1].bgcolor)
+      console.log(results[1])
       console.log('3');
     });
    
