@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3001;
 const cors = require('cors');
 app.use(cors());
 
@@ -55,8 +55,15 @@ app.get('/stickynotes', (req, res) => {
       if (error) throw error;
       console.log('2');
       res.send(results);
-      console.log(results[1])
-      console.log('3');
+     // console.log('Results: ',results);
+     // console.log(results[1].stickynoteid);
+      //console.log('3');
+
+    /*  var string=JSON.stringify(results);
+    console.log(string);
+    var json =  JSON.parse(string);
+   // to get one value here is the option
+    console.log(json[0].name);*/
     });
    
    console.log('1');
