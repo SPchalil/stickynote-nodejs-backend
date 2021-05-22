@@ -69,7 +69,12 @@ app.get('/stickynotes', (req, res) => {
    console.log('1');
    connection.end();
    })
-   
+/*
+app.delete('/stickynotes/{id}', (req, res)=>{
+   // TODO: get the id from path parameters
+   // TODO: query the database to delete the stickynote with that id
+   req.
+})
 /*
 To delete data in MySQL database from a node.js application, you follow these steps:
 
@@ -87,6 +92,7 @@ app.get('/stickynotes', (req, res) => {
    });
     
    connection.connect();
+
    let sql = `DELETE FROM stickynotes WHERE stickynotekey = ?`;
    connection.query(sql, 1, (error, results, fields)=> { 
       if (error) 
