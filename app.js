@@ -69,12 +69,36 @@ app.get('/stickynotes', (req, res) => {
    console.log('1');
    connection.end();
    })
-/*
-app.delete('/stickynotes/{id}', (req, res)=>{
+
+app.delete('/stickynotes/:stickynoteid', (req, res)=>{
    // TODO: get the id from path parameters
    // TODO: query the database to delete the stickynote with that id
-   req.
-})
+   //req.
+   
+      var mysql      = require('mysql2');
+      var connection = mysql.createConnection({
+        host     : 'localhost',
+        user     : 'root',
+        password : '123456',
+        database : 'stickynotesapp'
+      });
+       
+      connection.connect();
+      let { stickynoteid } = req.params.stickynoteid;
+      let sql = `DELETE FROM stickynotes WHERE stickynoteid = ${req.params.stickynoteid}`;
+
+      console.log("id: ", req.params.stickynoteid);
+   connection.query(sql, (error, results, fields)=> { 
+      if (error) return console.error(error.message);
+      res.status(200).send(results);
+      console.log('Deleted Row(s):', results.affectedRows);
+    });
+      
+    
+      connection.end();
+      })
+   
+
 /*
 To delete data in MySQL database from a node.js application, you follow these steps:
 
