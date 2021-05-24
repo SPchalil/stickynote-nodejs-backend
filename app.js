@@ -86,9 +86,9 @@ app.delete('/stickynotes/:stickynoteid', (req, res)=>{
       connection.connect();
       let { stickynoteid } = req.params.stickynoteid;
       let sql = `DELETE FROM stickynotes WHERE stickynoteid = ${req.params.stickynoteid}`;
-
+         
       console.log("id: ", req.params.stickynoteid);
-   connection.query(sql, (error, results, fields)=> { 
+      connection.query(sql, (error, results, fields)=> { 
       if (error) return console.error(error.message);
       res.status(200).send(results);
       console.log('Deleted Row(s):', results.affectedRows);
