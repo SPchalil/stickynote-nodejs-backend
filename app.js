@@ -39,7 +39,7 @@ connection.end();
 })
 
 /*-----------MySql - Stickynotes----------------*/
-
+/*-----------GET - Stickynotes----------------*/
 app.get('/stickynotes', (req, res) => {
    var mysql      = require('mysql2');
    var connection = mysql.createConnection({
@@ -53,7 +53,7 @@ app.get('/stickynotes', (req, res) => {
    
    connection.query('SELECT * from stickynotes', function (error, results, fields) { //ORM
       if (error) throw error;
-      console.log('2');
+     // console.log('2');
       res.send(results);
      // console.log('Results: ',results);
      // console.log(results[1].stickynoteid);
@@ -66,9 +66,11 @@ app.get('/stickynotes', (req, res) => {
     console.log(json[0].name);*/
     });
    
-   console.log('1');
+   //console.log('1');
    connection.end();
    })
+
+/*-----------DELETE - Stickynotes----------------*/
 
 app.delete('/stickynotes/:stickynoteid', (req, res)=>{
    // TODO: get the id from path parameters
@@ -86,7 +88,7 @@ app.delete('/stickynotes/:stickynoteid', (req, res)=>{
       connection.connect();
       let { stickynoteid } = req.params.stickynoteid;
       let sql = `DELETE FROM stickynotes WHERE stickynoteid = ${req.params.stickynoteid}`;
-         
+        
       console.log("id: ", req.params.stickynoteid);
       connection.query(sql, (error, results, fields)=> { 
       if (error) return console.error(error.message);
@@ -98,6 +100,37 @@ app.delete('/stickynotes/:stickynoteid', (req, res)=>{
       connection.end();
       })
    
+/*-----------PATCH - Stickynotes----------------*/
+app.patch('/stickynotes/:stickynoteid', (req, res)=>{
+   
+      var mysql      = require('mysql2');
+      var connection = mysql.createConnection({
+        host     : 'localhost',
+        user     : 'root',
+        password : '123456',
+        database : 'stickynotesapp'
+      });
+       
+      connection.connect();
+      let { stickynoteid } = req.params.stickynoteid;
+      console.log("text: ", req.body.text);
+      let sql = `UPDATE stickynotes SET text =  ${req.body.text} WHERE stickynoteid = ${req.params.stickynoteid}`;
+      //console.log("text: ", text);   
+      console.log("id: ", req.params.stickynoteid);
+      connection.query(sql, (error, results, fields)=> { 
+      if (error) return console.error(error.message);
+      res.status(200).send(results);
+      
+    });
+      
+    
+      connection.end();
+      })
+
+
+
+
+
 
 /*
 To delete data in MySQL database from a node.js application, you follow these steps:
