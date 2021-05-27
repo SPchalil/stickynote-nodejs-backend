@@ -4,6 +4,12 @@ const port = 3001;
 const cors = require('cors');
 app.use(cors());
 
+//bodyParser = require('body-parser');
+//app.use(bodyParser.urlencoded({extended:true}));
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 });
@@ -113,8 +119,12 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
        
       connection.connect();
       let { stickynoteid } = req.params.stickynoteid;
-      console.log("text: ", req.body.text);
-      let sql = `UPDATE stickynotes SET text =  ${req.body.text} WHERE stickynoteid = ${req.params.stickynoteid}`;
+      //console.log("text: ", req.body);
+      console.log("Body: ", req.body);
+      //req.body.params
+      //req.body.text
+      let sql = `UPDATE stickynotes SET text =  '${req.body.text}' WHERE stickynoteid = '${req.params.stickynoteid}'`;
+      //let sql = `UPDATE stickynotes SET bgcolor =  '${req.body.bgcolor}' WHERE stickynoteid = '${req.params.stickynoteid}'`;
       //console.log("text: ", text);   
       console.log("id: ", req.params.stickynoteid);
       connection.query(sql, (error, results, fields)=> { 
@@ -127,6 +137,95 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
       connection.end();
       })
 
+
+/*-----------POST - Users----------------*/
+      app.post('/users', (req, res)=>{
+   
+         var mysql      = require('mysql2');
+         var connection = mysql.createConnection({
+           host     : 'localhost',
+           user     : 'root',
+           password : '123456',
+           database : 'stickynotesapp'
+         });
+          
+         connection.connect();
+      
+         var user = {
+           userid: req.body.userid, 
+           username: req.body.username,
+           email: req.body.email,
+           password: req.body.password
+          }
+          // now the createStudent is an object you can use in your database insert logic.
+          connection.query('INSERT INTO stickynotes SET ?', user, function (error, results, fields) {
+            if (error) throw error;
+            // if there are no errors send an OK message.
+            //res.send('User Saved succesfully');
+            res.end(JSON.stringify(results));
+
+          });
+        
+         
+       
+         connection.end();
+         });
+      
+      
+      
+
+
+/*-----------POST - Stickynotes----------------*/
+
+app.post('/stickynotes', (req, res)=>{
+   
+   var mysql      = require('mysql2');
+   var connection = mysql.createConnection({
+     host     : 'localhost',
+     user     : 'root',
+     password : '123456',
+     database : 'stickynotesapp'
+   });
+    
+   connection.connect();
+  
+ /* var postData = req.body;
+   console.log("Body: ", req.body);
+   //req.body.params
+   //req.body.text
+   let sql = `INSERT INTO stickynotes SET ?', postData, WHERE stickynoteid = '${req.params.stickynoteid}'`;
+   
+   
+   connection.query(sql,postData, (error, results, fields)=> { 
+   if (error) return console.error(error.message);
+   res.status(200).send(results);
+   
+ });*/
+
+ 
+   // this is where you handle the POST request.
+   var stickynote = {
+     userid: req.body.userid, 
+     stickynoteid: req.body.stickynoteid,
+     title: req.body.title,
+     posx: req.body.posx,
+     posy: req.body.posy,
+     bgcolor:req.body.bgcolor,
+     color:req.body.color,
+     text:req.body.text
+    }
+    // now the createStudent is an object you can use in your database insert logic.
+    connection.query('INSERT INTO stickynotes SET ?', stickynote, function (err, resp) {
+      if (err) throw err;
+      // if there are no errors send an OK message.
+      res.send('Stickynote Saved succesfully');
+      res.end(JSON.stringify(results));
+    });
+  
+   
+ 
+   connection.end();
+   });
 
 
 
