@@ -157,6 +157,7 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
            email: req.body.email,
            password: req.body.password
           }
+         //let sql =  INSERT INTO `users` (`userid`,`username`,`email`,`password`)  VALUES ('Sheldon Cooper','Male','Woodcrest', '0976736763'); 
           // now the createStudent is an object you can use in your database insert logic.
           connection.query('INSERT INTO stickynotes SET ?', user, function (error, results, fields) {
             if (error) throw error;
@@ -214,12 +215,13 @@ app.post('/stickynotes', (req, res)=>{
      color:req.body.color,
      text:req.body.text
     }
+    
     // now the createStudent is an object you can use in your database insert logic.
     connection.query('INSERT INTO stickynotes SET ?', stickynote, function (err, resp) {
       if (err) throw err;
       // if there are no errors send an OK message.
-      res.send('Stickynote Saved succesfully');
-      res.end(JSON.stringify(results));
+      // res.send('Stickynote Saved succesfully');
+      res.sendStatus(200);
     });
   
    
