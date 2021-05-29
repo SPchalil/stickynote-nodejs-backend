@@ -1,6 +1,9 @@
+/*-----------Building a REST API using Node.js/ Express / MySql----------------*/
+
 const express = require('express');
 const app = express();
 const port = 3001;
+//const port=process.env.PORT||3001; 
 const cors = require('cors');
 app.use(cors());
 
@@ -13,14 +16,8 @@ app.use(express.urlencoded({extended:true}));
 app.get('/', (req, res) => {
   res.send('Hello World!')
 });
-/*
-app.post('/notes', (req, res) => {
-   console.log('here');
-   // req.body;
-   // sql.execute("INSERT INTO notes VALUES (1,title, ....)");
-});
-*/
-/*-----------MySql - Users----------------*/
+
+/*-----------MySql - GET Users----------------*/
 
 app.get('/users', (req, res) => {
 var mysql      = require('mysql2');
@@ -35,17 +32,17 @@ connection.connect();
 
 connection.query('SELECT * from users', function (error, results, fields) { //ORM
    if (error) throw error;
-   console.log('2');
+   //console.log('2');
    res.send(results);
-   console.log('3');
+   //console.log('3');
  });
 
-console.log('1');
+//console.log('1');
 connection.end();
 })
 
-/*-----------MySql - Stickynotes----------------*/
-/*-----------GET - Stickynotes----------------*/
+/*-----------MySql - GET Stickynotes----------------*/
+
 app.get('/stickynotes', (req, res) => {
    var mysql      = require('mysql2');
    var connection = mysql.createConnection({
@@ -61,15 +58,7 @@ app.get('/stickynotes', (req, res) => {
       if (error) throw error;
      // console.log('2');
       res.send(results);
-     // console.log('Results: ',results);
-     // console.log(results[1].stickynoteid);
-      //console.log('3');
-
-    /*  var string=JSON.stringify(results);
-    console.log(string);
-    var json =  JSON.parse(string);
-   // to get one value here is the option
-    console.log(json[0].name);*/
+     
     });
    
    //console.log('1');
@@ -121,19 +110,14 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
       let { stickynoteid } = req.params.stickynoteid;
       //console.log("text: ", req.body);
       console.log("Body: ", req.body);
-      //req.body.params
-      //req.body.text
       let sql = `UPDATE stickynotes SET text =  '${req.body.text}' WHERE stickynoteid = '${req.params.stickynoteid}'`;
       //let sql = `UPDATE stickynotes SET bgcolor =  '${req.body.bgcolor}' WHERE stickynoteid = '${req.params.stickynoteid}'`;
-      //console.log("text: ", text);   
       console.log("id: ", req.params.stickynoteid);
       connection.query(sql, (error, results, fields)=> { 
       if (error) return console.error(error.message);
       res.status(200).send(results);
       
     });
-      
-    
       connection.end();
       })
 
@@ -151,31 +135,23 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
           
          connection.connect();
       
-         var user = {
-           userid: req.body.userid, 
+         const user = {
            username: req.body.username,
            email: req.body.email,
            password: req.body.password
           }
-         //let sql =  INSERT INTO `users` (`userid`,`username`,`email`,`password`)  VALUES ('Sheldon Cooper','Male','Woodcrest', '0976736763'); 
-          // now the createStudent is an object you can use in your database insert logic.
-          connection.query('INSERT INTO stickynotes SET ?', user, function (error, results, fields) {
+         
+          connection.query('INSERT INTO users SET ?', user, function (error, results) {
             if (error) throw error;
             // if there are no errors send an OK message.
             //res.send('User Saved succesfully');
-            res.end(JSON.stringify(results));
-
+            //res.sendStatus(200);
+            res.status(200).send(results);
           });
-        
-         
-       
          connection.end();
          });
       
       
-      
-
-
 /*-----------POST - Stickynotes----------------*/
 
 app.post('/stickynotes', (req, res)=>{
@@ -189,22 +165,8 @@ app.post('/stickynotes', (req, res)=>{
    });
     
    connection.connect();
-  
- /* var postData = req.body;
-   console.log("Body: ", req.body);
-   //req.body.params
-   //req.body.text
-   let sql = `INSERT INTO stickynotes SET ?', postData, WHERE stickynoteid = '${req.params.stickynoteid}'`;
-   
-   
-   connection.query(sql,postData, (error, results, fields)=> { 
-   if (error) return console.error(error.message);
-   res.status(200).send(results);
-   
- });*/
 
- 
-   // this is where you handle the POST request.
+   // handle the POST request.
    var stickynote = {
      userid: req.body.userid, 
      stickynoteid: req.body.stickynoteid,
@@ -216,20 +178,20 @@ app.post('/stickynotes', (req, res)=>{
      text:req.body.text
     }
     
-    // now the createStudent is an object you can use in your database insert logic.
-    connection.query('INSERT INTO stickynotes SET ?', stickynote, function (err, resp) {
+    connection.query('INSERT INTO stickynotes SET ?', stickynote, function (err, results) {
       if (err) throw err;
       // if there are no errors send an OK message.
       // res.send('Stickynote Saved succesfully');
       res.sendStatus(200);
     });
-  
-   
- 
    connection.end();
    });
 
+/*-----------Listening to PORT----------------*/
 
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}!`)
+});
 
 
 
@@ -263,6 +225,7 @@ app.get('/stickynotes', (req, res) => {
    connection.end();
    })
 */
+
 /*-----------fake api notes----------------*/
 /*
 app.get('/notes', (req, res) => {
@@ -300,65 +263,4 @@ app.get('/notes', (req, res) => {
    //console.log(notes[0].positionX)
    res.send(notes)
  });
-*/
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}!`)
-});
-
-/*
-0.key
-1.positionX
-2.bgColor
-
-//0.key
-//0.title
-//0.positionX
-//0.positionY
-//0.color
-//0.bgColor
-//0.text
-
-const notes = [
-      {
-         key: "1",
-         title: "ToDo1",
-         positionX: "100px",
-         positionY: "150px",
-         color: "black",
-         bgColor: "blue",
-         text: "test"
-      },
-      {
-         key: "2",
-         title: "ToDo2",
-         positionX: "400px",
-         positionY: "600px",
-         color: "black",
-         bgColor: "yellow",
-         text: "test"
-      },
-      {
-         key: "3",
-         title: "ToDo3",
-         positionX: "200px",
-         positionY: "800px",
-         color: "black",
-         bgColor: "pink",
-         text: "test"
-      },
-   ]
-
-   ---------------------------------
-   const notes = [
-      {
-         key: "1",
-         title: "ToDo1",
-         positionX: "700px",
-         positionY: "350px",
-         color: "black",
-         bgColor: "blue",
-         text: "test"
-      }     
-      
-   ]
 */
