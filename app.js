@@ -122,7 +122,7 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
       })
 
 
-/*-----------POST - Users----------------*/
+/*-----------POST - Users (Register)----------------*/
       app.post('/users', (req, res)=>{
    
          var mysql      = require('mysql2');
@@ -151,7 +151,42 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
          connection.end();
          });
       
-      
+ 
+ /*-----------POST - Users (Login)----------------*/
+ /*
+ app.post('/users', (req, res)=>{
+   
+   var mysql      = require('mysql2');
+   var connection = mysql.createConnection({
+     host     : 'localhost',
+     user     : 'root',
+     password : '123456',
+     database : 'stickynotesapp'
+   });
+    
+   connection.connect();
+
+   if (req.body.email){
+      res.status(200).send("Login successful")
+   }
+
+   /*const user = {
+     username: req.body.username,
+     email: req.body.email,
+     password: req.body.password
+    }
+   
+    connection.query('INSERT INTO users SET ?', user, function (error, results) {
+      if (error) throw error;
+      // if there are no errors send an OK message.
+      //res.send('User Saved succesfully');
+      //res.sendStatus(200);
+      res.status(200).send(results);
+    });*/
+   connection.end();
+   });
+        
+*/
 /*-----------POST - Stickynotes----------------*/
 
 app.post('/stickynotes', (req, res)=>{
