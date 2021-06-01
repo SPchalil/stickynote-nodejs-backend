@@ -13,6 +13,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+var session = require('express-session');
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+
+/*-----------MySql - GET root----------------*/
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 });
@@ -140,7 +149,7 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
            email: req.body.email,
            password: req.body.password
           }
-         
+         // if (!username&&!email&&!password)
           connection.query('INSERT INTO users SET ?', user, function (error, results) {
             if (error) throw error;
             // if there are no errors send an OK message.
@@ -182,11 +191,57 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
       //res.send('User Saved succesfully');
       //res.sendStatus(200);
       res.status(200).send(results);
-    });*/
+    });
    connection.end();
    });
         
 */
+
+app.post('/users', function(req, res) {
+
+   var mysql      = require('mysql2');
+   var connection = mysql.createConnection({
+     host     : 'localhost',
+     user     : 'root',
+     password : '123456',
+     database : 'stickynotesapp'
+   });
+    
+   connection.connect();
+
+	const email = req.body.email;
+	const password = req.body.password;
+	if (email && password) {
+		connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], function(error, results, fields) {
+			if (results.length > 0) {
+				//request.session.loggedin = true;
+				//request.session.email = email;
+            //request.session.userid = userid;
+				//response.redirect('/stickynotesapp/Esteban');
+            res.status(200).send("Login successful");
+			} else {
+				//response.send('Incorrect Username and/or Password!');
+            res.status(500).send("Login unsuccessful");
+			}			
+			res.end();
+		});
+	} 
+});
+/*
+else {
+		response.send('Please enter Email and Password!');
+		response.end();
+	}
+app.get('/stickynotes/:userid', function(request, response) {
+	if (request.session.loggedin) {
+		response.send('Welcome back, ' + request.session.username + '!');
+	} else {
+		response.send('Please login to view this page!');
+	}
+	response.end();
+});
+*/
+
 /*-----------POST - Stickynotes----------------*/
 
 app.post('/stickynotes', (req, res)=>{
