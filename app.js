@@ -132,7 +132,7 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
 
 
 /*-----------POST - Users (Register)----------------*/
-      app.post('/users', (req, res)=>{
+      app.post('/register', (req, res)=>{
    
          var mysql      = require('mysql2');
          var connection = mysql.createConnection({
@@ -149,7 +149,7 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
            email: req.body.email,
            password: req.body.password
           }
-         // if (!username&&!email&&!password)
+
           connection.query('INSERT INTO users SET ?', user, function (error, results) {
             if (error) throw error;
             // if there are no errors send an OK message.
@@ -159,11 +159,45 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
           });
          connection.end();
          });
+          //console.log(user.email);
+/*
+          connection.query('SELECT * FROM users WHERE email = ?', [user.email], function (err, rows) {
+                        if (err) {
+                            //connection.end();
+                            console.log(err);
+                            
+                        }
+                        //if (error) throw error;
+                        if (!rows.length) {
+                            connection.query('INSERT INTO users SET ?', user, function (error2, results) {
+                                /*if (err2) {
+                                    console.log(err2);
+                                    
+                                } 
+                                if (error2) throw error2;
+                                
+                                 res.status(200).send(results);
+                                
+
+                                
+                            });
+                        }
+
+                        
+                        
+                    });
+                    connection.end();
+
+            });*/
+
+          
+         
+          
       
  
  /*-----------POST - Users (Login)----------------*/
  /*
- app.post('/users', (req, res)=>{
+ app.post('/login', (req, res)=>{
    
    var mysql      = require('mysql2');
    var connection = mysql.createConnection({
@@ -194,10 +228,10 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
     });
    connection.end();
    });
-        
-*/
+      
+------------------------------------------ */ 
 
-app.post('/users', function(req, res) {
+app.post('/login', function(req, res) {
 
    var mysql      = require('mysql2');
    var connection = mysql.createConnection({
@@ -218,14 +252,17 @@ app.post('/users', function(req, res) {
 				//request.session.email = email;
             //request.session.userid = userid;
 				//response.redirect('/stickynotesapp/Esteban');
-            res.status(200).send("Login successful");
+            res.status(200).send("Login successful"); //Response status code 200 means correct. 500 means incorrect.
+            
 			} else {
 				//response.send('Incorrect Username and/or Password!');
-            res.status(500).send("Login unsuccessful");
+            res.send("Login unsuccessful");
+            //res.status(500).send("Login unsuccessful");
 			}			
-			res.end();
+			//res.end();
 		});
 	} 
+   connection.end();
 });
 /*
 else {
