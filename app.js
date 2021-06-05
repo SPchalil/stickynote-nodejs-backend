@@ -13,13 +13,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-var session = require('express-session');
+/*var session = require('express-session');
 app.use(session({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true
 }));
-
+*/
 /*-----------MySql - GET root----------------*/
 
 app.get('/', (req, res) => {
@@ -73,6 +73,9 @@ app.get('/stickynotes', (req, res) => {
    //console.log('1');
    connection.end();
    })
+
+
+ 
 
 /*-----------DELETE - Stickynotes----------------*/
 
@@ -130,7 +133,88 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
       connection.end();
       })
 
+/*-----------POST - Checking (Register)----------------*/
+app.post('/check', (req, res)=>{
+   
+   var mysql      = require('mysql2');
+   var connection = mysql.createConnection({
+     host     : 'localhost',
+     user     : 'root',
+     password : '123456',
+     database : 'stickynotesapp'
+   });
+    
+   connection.connect();
 
+     const email= req.body.email;
+     const username= req.body.username;
+     const password= req.body.password;
+     
+     if (email && username && password){
+
+      connection.query('SELECT * FROM users WHERE email = ? OR username =  ? AND password = ?', [email, username, password], function (err, results) {
+      if (err) return console.error(err.message);
+      res.status(200).send(results);
+
+
+      });
+     }
+    
+   connection.end();
+   });
+ /*-----------------------------------------------------*/
+ /*-----------POST - Users (Registration)----------------*/
+ app.post('/registration', (req, res)=>{
+   
+   var mysql      = require('mysql2');
+   var connection = mysql.createConnection({
+     host     : 'localhost',
+     user     : 'root',
+     password : '123456',
+     database : 'stickynotesapp'
+   });
+    
+   connection.connect();
+   
+   const username=req.body.username;
+   const email = req.body.email;
+	const password = req.body.password;
+	if (email && username && password ) {
+		connection.query('SELECT * FROM users WHERE email = ? OR username =  ? AND password = ?', [email, username, password], function(error, rows, fields) {
+
+         if (error) return console.error(error.message);
+         // res.status(200).send(results);
+
+			if (!rows.length ) {
+				//request.session.loggedin = true;
+				//request.session.email = email;
+            //request.session.userid = userid;
+				//response.redirect('/stickynotesapp/Esteban');
+            //INSERT INTO `table` SET a='val1',b='val2',c='val3'
+            connection.query('INSERT INTO users SET email =  ? AND username =  ? AND password =  ?' , [email, username, password], function (err, results) {
+            if (err) throw err;
+               // if there are no errors send an OK message.
+               //res.send('User Saved succesfully');
+               //res.sendStatus(200);
+               res.status(200).send(results);
+               //res.status(200).send("user registered"); //Response status code 200 means correct. 500 means incorrect.
+             });
+            
+            
+			} else {
+				//response.send('Incorrect Username and/or Password!');
+            //res.send("user exists");
+            res.status(500).send("user exists");
+			}			
+			//res.end();*/
+		});
+	} 
+   connection.end();
+});
+
+ 
+ /*----------------------------------------------------*/
+    
 /*-----------POST - Users (Register)----------------*/
       app.post('/register', (req, res)=>{
    
@@ -159,80 +243,19 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
           });
          connection.end();
          });
-          //console.log(user.email);
-/*
-          connection.query('SELECT * FROM users WHERE email = ?', [user.email], function (err, rows) {
-                        if (err) {
-                            //connection.end();
-                            console.log(err);
-                            
-                        }
-                        //if (error) throw error;
-                        if (!rows.length) {
-                            connection.query('INSERT INTO users SET ?', user, function (error2, results) {
-                                /*if (err2) {
-                                    console.log(err2);
-                                    
-                                } 
-                                if (error2) throw error2;
-                                
-                                 res.status(200).send(results);
-                                
-
-                                
-                            });
-                        }
-
-                        
-                        
-                    });
-                    connection.end();
-
-            });*/
-
           
-         
-          
-      
  
  /*-----------POST - Users (Login)----------------*/
- /*
- app.post('/login', (req, res)=>{
-   
-   var mysql      = require('mysql2');
-   var connection = mysql.createConnection({
-     host     : 'localhost',
-     user     : 'root',
-     password : '123456',
-     database : 'stickynotesapp'
-   });
-    
-   connection.connect();
-
-   if (req.body.email){
-      res.status(200).send("Login successful")
-   }
-
-   /*const user = {
-     username: req.body.username,
-     email: req.body.email,
-     password: req.body.password
-    }
-   
-    connection.query('INSERT INTO users SET ?', user, function (error, results) {
-      if (error) throw error;
-      // if there are no errors send an OK message.
-      //res.send('User Saved succesfully');
-      //res.sendStatus(200);
-      res.status(200).send(results);
-    });
-   connection.end();
-   });
-      
------------------------------------------- */ 
-
+ 
 app.post('/login', function(req, res) {
 
+   // console.log('1')
+   // const paypalResult = await axios.post('https://api.paypal.com', {});
+   // if(paypalResult.paid === true) {
+      
+   // } else {
+
+   // }
    var mysql      = require('mysql2');
    var connection = mysql.createConnection({
      host     : 'localhost',
@@ -247,6 +270,10 @@ app.post('/login', function(req, res) {
 	const password = req.body.password;
 	if (email && password) {
 		connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], function(error, results, fields) {
+
+         if (error) return console.error(error.message);
+         // res.status(200).send(results);
+
 			if (results.length > 0) {
 				//request.session.loggedin = true;
 				//request.session.email = email;
@@ -257,27 +284,14 @@ app.post('/login', function(req, res) {
 			} else {
 				//response.send('Incorrect Username and/or Password!');
             res.send("Login unsuccessful");
-            //res.status(500).send("Login unsuccessful");
+            res.status(500).send("Login unsuccessful");
 			}			
-			//res.end();
+			//res.end();*/
 		});
 	} 
    connection.end();
 });
-/*
-else {
-		response.send('Please enter Email and Password!');
-		response.end();
-	}
-app.get('/stickynotes/:userid', function(request, response) {
-	if (request.session.loggedin) {
-		response.send('Welcome back, ' + request.session.username + '!');
-	} else {
-		response.send('Please login to view this page!');
-	}
-	response.end();
-});
-*/
+
 
 /*-----------POST - Stickynotes----------------*/
 
@@ -321,7 +335,7 @@ app.listen(port, () => {
 });
 
 
-
+/*-----------------------------------------------------------------------------------------------------/*
 /*
 To delete data in MySQL database from a node.js application, you follow these steps:
 
@@ -391,3 +405,4 @@ app.get('/notes', (req, res) => {
    res.send(notes)
  });
 */
+/*-----------------------------------------------------------------------------------------------------*/
