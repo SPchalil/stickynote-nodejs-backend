@@ -182,7 +182,7 @@ app.post('/check', (req, res)=>{
 	if (email && username && password ) {
 		connection.query('SELECT * FROM users WHERE email = ? OR username =  ? AND password = ?', [email, username, password], function(error, rows, fields) {
 
-         if (error) return console.error(error.message);
+         //if (error) return console.error(error.message);
          // res.status(200).send(results);
 
 			if (!rows.length ) {
@@ -196,8 +196,8 @@ app.post('/check', (req, res)=>{
                // if there are no errors send an OK message.
                //res.send('User Saved succesfully');
                //res.sendStatus(200);
-               res.status(200).send(results);
-               //res.status(200).send("user registered"); //Response status code 200 means correct. 500 means incorrect.
+               //res.status(200).send(results);
+               res.status(200).send("user registered"); //Response status code 200 means correct. 500 means incorrect.
              });
             
             
@@ -279,8 +279,8 @@ app.post('/login', function(req, res) {
 				//request.session.email = email;
             //request.session.userid = userid;
 				//response.redirect('/stickynotesapp/Esteban');
-            res.status(200).send("Login successful"); //Response status code 200 means correct. 500 means incorrect.
-            
+            //res.status(200).send("Login successful"); //Response status code 200 means correct. 500 means incorrect.
+            res.status(200).send(results);
 			} else {
 				//response.send('Incorrect Username and/or Password!');
             res.send("Login unsuccessful");
