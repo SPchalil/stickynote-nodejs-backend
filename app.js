@@ -196,8 +196,8 @@ app.post('/check', (req, res)=>{
                // if there are no errors send an OK message.
                //res.send('User Saved succesfully');
                //res.sendStatus(200);
-               res.status(200).send(results);
-              // res.status(200).send("user registered"); //Response status code 200 means correct. 500 means incorrect.
+               //res.status(200).send(results);
+              res.status(200).send("user registered"); //Response status code 200 means correct. 500 means incorrect.
              });
             
             
