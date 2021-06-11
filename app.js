@@ -192,12 +192,12 @@ app.post('/check', (req, res)=>{
 				//response.redirect('/stickynotesapp/Esteban');
             //INSERT INTO `table` SET a='val1',b='val2',c='val3'
             connection.query('INSERT INTO users SET email =  ? AND username =  ? AND password =  ?' , [email, username, password], function (err, results) {
-            if (err) throw err;
+            //if (err) throw err;
                // if there are no errors send an OK message.
                //res.send('User Saved succesfully');
                //res.sendStatus(200);
-               //res.status(200).send(results);
-               res.status(200).send("user registered"); //Response status code 200 means correct. 500 means incorrect.
+               res.status(200).send(results);
+              // res.status(200).send("user registered"); //Response status code 200 means correct. 500 means incorrect.
              });
             
             
