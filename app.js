@@ -7,19 +7,9 @@ const port = 3001;
 const cors = require('cors');
 app.use(cors());
 
-//bodyParser = require('body-parser');
-//app.use(bodyParser.urlencoded({extended:true}));
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-/*var session = require('express-session');
-app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
-}));
-*/
 /*-----------MySql - GET root----------------*/
 
 app.get('/', (req, res) => {
@@ -39,14 +29,10 @@ var connection = mysql.createConnection({
  
 connection.connect();
 
-connection.query('SELECT * from users', function (error, results, fields) { //ORM
+connection.query('SELECT * from users', function (error, results, fields) { 
    if (error) throw error;
-   //console.log('2');
    res.send(results);
-   //console.log('3');
  });
-
-//console.log('1');
 connection.end();
 })
 
@@ -65,25 +51,14 @@ app.get('/stickynotes', (req, res) => {
    
    connection.query('SELECT * from stickynotes', function (error, results, fields) { //ORM
       if (error) throw error;
-     // console.log('2');
       res.send(results);
-     
     });
-   
-   //console.log('1');
    connection.end();
    })
-
-
- 
 
 /*-----------DELETE - Stickynotes----------------*/
 
 app.delete('/stickynotes/:stickynoteid', (req, res)=>{
-   // TODO: get the id from path parameters
-   // TODO: query the database to delete the stickynote with that id
-   //req.
-   
       var mysql      = require('mysql2');
       var connection = mysql.createConnection({
         host     : 'localhost',
@@ -94,16 +69,13 @@ app.delete('/stickynotes/:stickynoteid', (req, res)=>{
        
       connection.connect();
       let { stickynoteid } = req.params.stickynoteid;
-      let sql = `DELETE FROM stickynotes WHERE stickynoteid = ${req.params.stickynoteid}`;
-        
+      let sql = `DELETE FROM stickynotes WHERE stickynoteid = ${req.params.stickynoteid}`; 
       console.log("id: ", req.params.stickynoteid);
       connection.query(sql, (error, results, fields)=> { 
       if (error) return console.error(error.message);
       res.status(200).send(results);
       console.log('Deleted Row(s):', results.affectedRows);
     });
-      
-    
       connection.end();
       })
    
@@ -120,15 +92,12 @@ app.patch('/stickynotes/:stickynoteid', (req, res)=>{
        
       connection.connect();
       let { stickynoteid } = req.params.stickynoteid;
-      //console.log("text: ", req.body);
       console.log("Body: ", req.body);
       let sql = `UPDATE stickynotes SET text =  '${req.body.text}' WHERE stickynoteid = '${req.params.stickynoteid}'`;
-      //let sql = `UPDATE stickynotes SET bgcolor =  '${req.body.bgcolor}' WHERE stickynoteid = '${req.params.stickynoteid}'`;
       console.log("id: ", req.params.stickynoteid);
       connection.query(sql, (error, results, fields)=> { 
       if (error) return console.error(error.message);
       res.status(200).send(results);
-      
     });
       connection.end();
       })
@@ -143,26 +112,21 @@ app.post('/check', (req, res)=>{
      password : '123456',
      database : 'stickynotesapp'
    });
-    
    connection.connect();
-
      const email= req.body.email;
      const username= req.body.username;
      const password= req.body.password;
      
      if (email && username && password){
-
       connection.query('SELECT * FROM users WHERE email = ? OR username =  ? AND password = ?', [email, username, password], function (err, results) {
       if (err) return console.error(err.message);
       res.status(200).send(results);
-
-
       });
      }
     
    connection.end();
    });
- /*-----------------------------------------------------*/
+ 
  /*-----------POST - Users (Registration)----------------*/
  app.post('/registration', (req, res)=>{
    
@@ -186,11 +150,6 @@ app.post('/check', (req, res)=>{
          // res.status(200).send(results);
 
 			if (!rows.length ) {
-				//request.session.loggedin = true;
-				//request.session.email = email;
-            //request.session.userid = userid;
-				//response.redirect('/stickynotesapp/Esteban');
-            //INSERT INTO `table` SET a='val1',b='val2',c='val3'
             connection.query('INSERT INTO users SET email =  ? AND username =  ? AND password =  ?' , [email, username, password], function (err, results) {
             //if (err) throw err;
                // if there are no errors send an OK message.
@@ -212,8 +171,6 @@ app.post('/check', (req, res)=>{
    connection.end();
 });
 
- 
- /*----------------------------------------------------*/
     
 /*-----------POST - Users (Register)----------------*/
       app.post('/register', (req, res)=>{
@@ -275,10 +232,6 @@ app.post('/login', function(req, res) {
          // res.status(200).send(results);
 
 			if (results.length > 0) {
-				//request.session.loggedin = true;
-				//request.session.email = email;
-            //request.session.userid = userid;
-				//response.redirect('/stickynotesapp/Esteban');
             //res.status(200).send("Login successful"); //Response status code 200 means correct. 500 means incorrect.
             res.status(200).send(results);
 			} else {
