@@ -236,8 +236,9 @@ app.post('/login', function(req, res) {
             res.status(200).send(results);
 			} else {
 				//response.send('Incorrect Username and/or Password!');
-            res.send("Login unsuccessful");
-            res.status(500).send("Login unsuccessful");
+            //res.send("Login unsuccessful");
+            //res.status(500).send("Login unsuccessful");
+            res.send(results);
 			}			
 			//res.end();*/
 		});
